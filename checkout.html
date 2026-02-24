@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - KOMAL RO SYSTEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* All your existing CSS remains exactly the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+        
+        /* Add this to your existing CSS for multiple products */
+.product-info:not(:last-child) {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.multiple-products .product-info:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+        header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            z-index: 2;
+        }
+        
+        .step.active .step-number {
+            background-color: #2575fc;
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .step-text {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .step.active .step-text {
+            color: #2575fc;
+            font-weight: 500;
+        }
+        
+        .step.completed .step-text {
+            color: #4caf50;
+        }
+        
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 70px;
+            right: -20px;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .step:last-child::after {
+            display: none;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            color: #2575fc;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .address-type {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .address-type-btn {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .address-type-btn.active {
+            border-color: #2575fc;
+            background-color: #f0f7ff;
+            color: #2575fc;
+            font-weight: 500;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+        
+        .product-info {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-image i {
+            font-size: 40px;
+            color: white;
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .add-address-btn {
+            text-align: center;
+            color: #2575fc;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        
+        .add-address-btn:hover {
+            text-decoration: underline;
+        }
+        
+        /* NEW STYLES FOR SAVED ADDRESSES */
+        .saved-addresses {
+            margin-bottom: 25px;
+        }
+
+        .saved-addresses-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .saved-addresses-title h3 {
+            color: #2575fc;
+            font-size: 16px;
+        }
+
+        .toggle-saved-addresses {
+            background: none;
+            border: none;
+            color: #2575fc;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+
+        .address-suggestions {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .address-suggestions.show {
+            display: block;
+        }
+
+        .saved-address-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .saved-address-card:hover {
+            border-color: #2575fc;
+            background: #f8fbff;
+        }
+
+        .saved-address-card.selected {
+            border-color: #2575fc;
+            background: #f0f7ff;
+            box-shadow: 0 2px 8px rgba(37, 117, 252, 0.2);
+        }
+
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .address-type-badge {
+            background: #2575fc;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .address-type-badge.home {
+            background: #4caf50;
+        }
+
+        .address-type-badge.work {
+            background: #ff9800;
+        }
+
+        .address-details {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .address-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .use-this-address-btn {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .use-this-address-btn:hover {
+            background: #1c68e0;
+        }
+
+        .no-saved-addresses {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+        }
+
+        .add-new-address-section {
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #2575fc;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .progress-steps {
+                flex-wrap: wrap;
+            }
+            
+            .step {
+                margin-bottom: 20px;
+            }
+            
+            .address-type {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .success-message i {
+            font-size: 60px;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h2 {
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">KOMAL RO SYSTEM</div>
+            <div class="secure-checkout">Secure Checkout</div>
+        </div>
+    </header>
+    
+    <div class="progress-steps">
+        <div class="step completed">
+            <div class="step-number">1</div>
+            <div class="step-text">Cart</div>
+        </div>
+        <div class="step active">
+            <div class="step-number">2</div>
+            <div class="step-text">Address</div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-text">Payment</div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-text">Confirmation</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="left-column">
+            <!-- NEW: Saved Addresses Section -->
+            <div class="card">
+                <div class="saved-addresses">
+                    <div class="saved-addresses-title">
+                        <h3><i class="fas fa-address-book"></i> Saved Addresses</h3>
+                        <button class="toggle-saved-addresses" id="toggleSavedAddresses">
+                            Show Saved Addresses
+                        </button>
+                    </div>
+                    
+                    <div class="address-suggestions" id="addressSuggestions">
+                        <!-- Saved addresses will be loaded here dynamically -->
+                    </div>
+                </div>
+
+                <div class="add-new-address-section">
+                    <div class="section-title">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Add New Delivery Address</h3>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="tel" id="mobile" class="form-control" placeholder="10-digit mobile number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" class="form-control" placeholder="6 digits [0-9]">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address (Area and Street)</label>
+                        <textarea id="address" class="form-control" rows="3" placeholder="House/Flat no., Building, Street, Area"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="city">City/District/Town</label>
+                            <input type="text" id="city" class="form-control" placeholder="Enter your city">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select id="state" class="form-control">
+                                <option value="">Select State</option>
+                                <option value="MH">Maharashtra</option>
+                                <option value="DL">Delhi</option>
+                                <option value="KA">Karnataka</option>
+                                <option value="TN">Tamil Nadu</option>
+                                <option value="UP">Uttar Pradesh</option>
+                                <option value="GJ">Gujarat</option>
+                                <option value="WB">West Bengal</option>
+                                <option value="RJ">Rajasthan</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="landmark">Landmark (Optional)</label>
+                        <input type="text" id="landmark" class="form-control" placeholder="E.g. near Apollo Hospital">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Address Type</label>
+                        <div class="address-type">
+                            <div class="address-type-btn active" data-type="home">Home</div>
+                            <div class="address-type-btn" data-type="work">Work</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            <div class="right-column">
+            <div class="card">
+                <h2 class="card-title">Order Summary</h2>
+                
+                <div id="productsContainer">
+                    <div class="product-info">
+                        <div class="product-image">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="product-details">
+                            <div class="product-name">Cruze Zircon Water Purifier</div>
+                            <div class="product-price">₹15,999</div>
+                            <div>Quantity: 1</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary-item">
+                    <div>Subtotal</div>
+                    <div>₹15,999</div>
+                </div>
+                
+                <div class="order-summary-item">
+                    <div>Delivery Charges</div>
+                    <div style="color: #4caf50;">FREE</div>
+                </div>
+                
+                <div class="order-summary-item">
+                    <div>GST</div>
+                    <div>₹1,600</div>
+                </div>
+                
+                <div class="order-total">
+                    <div>Total</div>
+                    <div>₹17,599</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="saveAddress" checked>
+                        <span>Save this address for future orders</span>
+                    </label>
+                </div>
+                
+                <button class="btn btn-block" id="placeOrderBtn" style="margin-top: 20px;">Proceed to Payment</button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">Delivery Information</h2>
+                <p>Your order will be delivered within 5-7 business days.</p>
+                <p>Installation will be scheduled after delivery confirmation.</p>
+                <p>For any queries, contact our customer support at <strong>1800-123-4567</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debug function to check localStorage contents
+        function debugLocalStorage() {
+            console.log('=== CHECKOUT PAGE LOCALSTORAGE DEBUG ===');
+            const allKeys = Object.keys(localStorage);
+            console.log('All localStorage keys:', allKeys);
+            
+            allKeys.forEach(key => {
+                if (key.toLowerCase().includes('cart') || 
+                    key.toLowerCase().includes('product') || 
+                    key.toLowerCase().includes('order')) {
+                    console.log(`Found key "${key}":`, localStorage.getItem(key));
+                }
+            });
+            console.log('=== END DEBUG ===');
+        }
+    
+        // Enhanced cart loading function
+        function loadCartItems() {
+            debugLocalStorage();
+            
+            try {
+                let cartData = localStorage.getItem('cart') || 
+                              localStorage.getItem('shoppingCart') || 
+                              localStorage.getItem('cartItems') ||
+                              localStorage.getItem('product');
+                
+                console.log('Cart data found:', cartData);
+    
+                if (!cartData) {
+                    console.log('No cart data found in any storage key');
+                    return;
+                }
+    
+                let cart;
+                try {
+                    cart = typeof cartData === 'string' ? JSON.parse(cartData) : cartData;
+                    console.log('Parsed cart:', cart);
+                } catch (parseError) {
+                    console.error('Error parsing cart data:', parseError);
+                    return;
+                }
+    
+                const orderSummaryContainer = document.querySelector('.right-column .card:first-child');
+                if (!orderSummaryContainer) {
+                    console.error('Order summary container not found');
+                    return;
+                }
+    
+                let productsContainer = orderSummaryContainer.querySelector('#productsContainer');
+                if (!productsContainer) {
+                    const existingProductInfo = orderSummaryContainer.querySelector('.product-info');
+                    if (existingProductInfo) {
+                        productsContainer = document.createElement('div');
+                        productsContainer.id = 'productsContainer';
+                        existingProductInfo.parentNode.insertBefore(productsContainer, existingProductInfo);
+                        existingProductInfo.remove();
+                    } else {
+                        console.error('Could not find or create products container');
+                        return;
+                    }
+                }
+    
+                let subtotal = 0;
+                let productHTML = '';
+    
+                if (Array.isArray(cart)) {
+                    console.log('Processing cart as array');
+                    cart.forEach(item => {
+                        const itemName = item.name || item.productName || item.product_name || 'Product';
+                        const itemPrice = Number(item.price || item.productPrice || item.product_price || 0);
+                        const itemQuantity = Number(item.quantity || item.qty || 1);
+                        const itemTotal = itemPrice * itemQuantity;
+                        subtotal += itemTotal;
+    
+                        productHTML += `
+                            <div class="product-info">
+                                <div class="product-image">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-name">${itemName}</div>
+                                    <div class="product-price">₹${itemPrice.toLocaleString()}</div>
+                                    <div>Quantity: ${itemQuantity}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else if (cart.items && Array.isArray(cart.items)) {
+                    console.log('Processing cart with items array');
+                    cart.items.forEach(item => {
+                        const itemName = item.name || item.productName || item.product_name || 'Product';
+                        const itemPrice = Number(item.price || item.productPrice || item.product_price || 0);
+                        const itemQuantity = Number(item.quantity || item.qty || 1);
+                        const itemTotal = itemPrice * itemQuantity;
+                        subtotal += itemTotal;
+    
+                        productHTML += `
+                            <div class="product-info">
+                                <div class="product-image">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-name">${itemName}</div>
+                                    <div class="product-price">₹${itemPrice.toLocaleString()}</div>
+                                    <div>Quantity: ${itemQuantity}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else if (cart.name || cart.productName) {
+                    console.log('Processing single product cart');
+                    const itemName = cart.name || cart.productName || cart.product_name || 'Cruze Zircon Water Purifier';
+                    const itemPrice = Number(cart.price || cart.productPrice || cart.product_price || 15999);
+                    const itemQuantity = Number(cart.quantity || cart.qty || 1);
+                    subtotal = itemPrice * itemQuantity;
+    
+                    productHTML = `
+                        <div class="product-info">
+                            <div class="product-image">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="product-details">
+                                <div class="product-name">${itemName}</div>
+                                <div class="product-price">₹${itemPrice.toLocaleString()}</div>
+                                <div>Quantity: ${itemQuantity}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    console.log('Unknown cart format, using default');
+                    subtotal = 15999;
+                    productHTML = `
+                        <div class="product-info">
+                            <div class="product-image">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="product-details">
+                                <div class="product-name">Cruze Zircon Water Purifier</div>
+                                <div class="product-price">₹15,999</div>
+                                <div>Quantity: 1</div>
+                            </div>
+                        </div>
+                    `;
+                }
+    
+                productsContainer.innerHTML = productHTML;
+    
+                const deliveryCharges = 0;
+                const gst = Math.round(subtotal * 0.10);
+                const total = subtotal + deliveryCharges + gst;
+    
+                console.log('Calculated totals - Subtotal:', subtotal, 'GST:', gst, 'Total:', total);
+    
+                const orderSummaryItems = orderSummaryContainer.querySelectorAll('.order-summary-item');
+                
+                if (orderSummaryItems[0]) {
+                    orderSummaryItems[0].innerHTML = `<div>Subtotal</div><div>₹${subtotal.toLocaleString()}</div>`;
+                }
+                
+                if (orderSummaryItems[1]) {
+                    orderSummaryItems[1].innerHTML = `<div>Delivery Charges</div><div style="color: #4caf50;">FREE</div>`;
+                }
+                
+                if (orderSummaryItems[2]) {
+                    orderSummaryItems[2].innerHTML = `<div>GST</div><div>₹${gst.toLocaleString()}</div>`;
+                }
+    
+                const orderTotal = orderSummaryContainer.querySelector('.order-total');
+                if (orderTotal) {
+                    orderTotal.innerHTML = `<div>Total</div><div>₹${total.toLocaleString()}</div>`;
+                }
+    
+                const payButton = orderSummaryContainer.querySelector('.btn');
+                if (payButton) {
+                    payButton.innerHTML = `Proceed to Pay ₹${total.toLocaleString()}`;
+                }
+    
+                console.log('Cart items loaded successfully');
+    
+            } catch (error) {
+                console.error('Error loading cart items:', error);
+            }
+        }
+    
+        // Address type functionality
+        const addressTypeBtns = document.querySelectorAll('.address-type-btn');
+        let selectedAddressType = 'home';
+        
+        addressTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                addressTypeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedAddressType = btn.getAttribute('data-type');
+                console.log('Selected address type:', selectedAddressType);
+            });
+        });
+    
+        // Place Order button functionality - FIXED VERSION
+        document.getElementById('placeOrderBtn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            const originalText = placeOrderBtn.innerHTML;
+            
+            console.log('🔄 Place Order button clicked');
+            
+            // Get form values and trim whitespace
+            const fullName = document.getElementById('fullName').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const pincode = document.getElementById('pincode').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value;
+            const landmark = document.getElementById('landmark').value.trim();
+            const saveAddress = document.getElementById('saveAddress').checked;
+            
+            console.log('Form values:', { fullName, mobile, pincode, address, city, state, landmark });
+            
+            // Validate required fields
+            if (!fullName || !mobile || !pincode || !address || !city || !state) {
+                alert('Please fill in all required address fields');
+                return;
+            }
+            
+            // Enhanced mobile number validation
+            const cleanMobile = mobile.replace(/[^0-9]/g, '').replace(/^0+/, '');
+            const mobileRegex = /^[6-9][0-9]{9}$/;
+            if (!mobileRegex.test(cleanMobile)) {
+                alert('Please enter a valid 10-digit Indian mobile number starting with 6-9');
+                return;
+            }
+            
+            // Enhanced pincode validation
+            const cleanPincode = pincode.replace(/[^0-9]/g, '');
+            const pincodeRegex = /^[1-9][0-9]{5}$/;
+            if (!pincodeRegex.test(cleanPincode)) {
+                alert('Please enter a valid 6-digit pincode');
+                return;
+            }
+            
+            // Show loading state
+            placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            placeOrderBtn.disabled = true;
+            
+            try {
+                // Prepare order data
+                const orderData = {
+                    fullName: fullName,
+                    mobile: cleanMobile,
+                    pincode: cleanPincode,
+                    address: address,
+                    city: city,
+                    state: state,
+                    landmark: landmark,
+                    addressType: selectedAddressType,
+                    saveAddress: saveAddress
+                };
+                
+                console.log('📦 Sending order data:', orderData);
+                
+                // Store address data in localStorage for payment page
+                localStorage.setItem('checkoutAddress', JSON.stringify(orderData));
+                
+                // Generate order ID
+                const orderId = 'KRS' + Date.now();
+                localStorage.setItem('currentOrderId', orderId);
+                
+                console.log('✅ Order created with ID:', orderId);
+                
+                // Simulate successful order creation
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Redirect to payment page
+                console.log('🔄 Redirecting to payment page...');
+                window.location.href = 'payment.html?order_id=' + orderId;
+                
+            } catch (error) {
+                console.error('❌ Order creation error:', error);
+                alert('An error occurred while processing your order. Please try again.');
+                placeOrderBtn.innerHTML = originalText;
+                placeOrderBtn.disabled = false;
+            }
+        });
+    
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartItems();
+            console.log('Checkout page initialized');
+        });
+    </script>
+</body>
+</html>

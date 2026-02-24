@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOMAL RO SYSTEM - Water Purifier Store</title>
+    <style>
+        /* All your existing CSS remains the same */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .top-bar {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .top-bar h1 {
+            font-size: 24px;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .login-btn,
+        .logout-btn {
+            background-color: white;
+            color: #2575fc;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover,
+        .logout-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .cart-box {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+        
+        .cart-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .cart-box a {
+            text-decoration: none;
+            color: #2575fc;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* NEW: Search bar styles */
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 500px;
+            padding: 0 20px;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-bar:focus {
+            box-shadow: 0 4px 15px rgba(37, 117, 252, 0.2);
+        }
+        
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        
+        .product {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-content {
+            padding: 15px;
+        }
+        
+        .product h2 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .product p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .price {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+        
+        .product button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .product button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .welcome-message h2 {
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+        /* Additional styles for user welcome message */
+        
+        #userWelcome {
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        /* Loading overlay styles */
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2575fc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Notification toast */
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        /* NEW: No results message style */
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+            color: #666;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="top-bar">
+        <h1>KOMAL RO SYSTEM</h1>
+        <div class="user-actions">
+            <span id="userWelcome"></span>
+            <a href="login.php" class="login-btn" id="loginBtn">🔐 Login</a>
+            <a href="logout.php" class="logout-btn" id="logoutBtn" style="display: none;">Logout</a>
+        </div>
+    </div>
+
+    <div class="cart-box">
+        <a href="cart.html">🛒 View Cart (<span id="cart-count">0</span>)</a>
+    </div>
+
+    <div id="welcomeMessage" class="welcome-message" style="display: none;">
+        <h2>Welcome back to KOMAL RO SYSTEM!</h2>
+        <p>Enjoy shopping for the best water purifiers.</p>
+    </div>
+
+    <!-- NEW: Search bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search for water purifiers..." oninput="filterProducts()">
+    </div>
+
+    <main>
+        <section class="product-list">
+            <div class="product-container" id="productContainer">
+                <div class="product">
+                    <img src="purifier1.jpg" alt="cruze zircon water purifier">
+                    <div class="product-content">
+                        <h2>Cruze Zircon Water Purifier</h2>
+                        <p>RO AlkalineB12 TDS Controller. Storage: 12 Liter. Includes Pre-Filter, Inline Filters, RO Membrane, SMPS, Installation Kit.</p>
+                        <span class="price">₹15,999</span>
+                        <button onclick="addToCart('Cruze Zircon Water Purifier', 15999)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="purifier2.jpg" alt="Neil-Kart CITRON RO+UV water Purifier">
+                    <div class="product-content">
+                        <h2>Neil-Kart CITRON RO+UV Water Purifier</h2>
+                        <p>7-stage filtration with 10L storage tank. Mineral booster technology. Suitable for well water up to 2000 TDS.</p>
+                        <span class="price">₹20,000</span>
+                        <button onclick="addToCart('Neil-Kart CITRON RO+UV Water Purifier', 20000)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="purifier3.jpg" alt="AQUA Zuric RO Water Purifier">
+                    <div class="product-content">
+                        <h2>AQUA Zuric RO Water Purifier</h2>
+                        <p>Advanced filtration with RO, UV, TDS Adjuster, and Active Copper technology. Countertop installation.</p>
+                        <span class="price">₹10,000</span>
+                        <button onclick="addToCart('AQUA Zuric RO Water Purifier', 10000)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="purifier4.jpg" alt="Purifier Model 4">
+                    <div class="product-content">
+                        <h2>Premium RO+UV+UF+Copper Purifier</h2>
+                        <p>Electric purification with 7L storage. Suitable for areas with water shortage. Multiple filtration stages.</p>
+                        <span class="price">₹35,000</span>
+                        <button onclick="addToCart('Premium RO+UV+UF+Copper Purifier', 35000)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="purifier5.jpg" alt="Purifier Model 5">
+                    <div class="product-content">
+                        <h2>Smart Digital RO Purifier</h2>
+                        <p>Smart digital display with ultra-filtration technology. User-friendly interface and efficient purification.</p>
+                        <span class="price">₹9,999</span>
+                        <button onclick="addToCart('Smart Digital RO Purifier', 9999)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="purifier6.jpg" alt="Purifier Model 6">
+                    <div class="product-content">
+                        <h2>Instant Hot & Cold Water Purifier</h2>
+                        <p>Instant hot and cold water technology. Energy efficient with sleek design and advanced safety features.</p>
+                        <span class="price">₹45,999</span>
+                        <button onclick="addToCart('Instant Hot & Cold Water Purifier', 45999)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Show a toast notification
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = isSuccess ? '#4caf50' : '#f44336';
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const username = localStorage.getItem('username');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userWelcome = document.getElementById('userWelcome');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+
+            if (isLoggedIn && username) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'block';
+                if (userWelcome) userWelcome.textContent = `Welcome, ${username}!`;
+                if (welcomeMessage) welcomeMessage.style.display = 'block';
+            } else {
+                if (loginBtn) loginBtn.style.display = 'block';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                if (userWelcome) userWelcome.textContent = '';
+                if (welcomeMessage) welcomeMessage.style.display = 'none';
+            }
+
+            updateCartCount();
+        }
+
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        function addToCart(productName, productPrice) {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (!isLoggedIn) {
+                showToast('Please login first to add items to cart', false);
+                setTimeout(() => {
+                    window.location.href = 'login.php';
+                }, 1500);
+                return;
+            }
+
+            let product = cart.find(item => item.name === productName);
+            if (product) {
+                product.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: productPrice,
+                    quantity: 1
+                });
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            showToast(`${productName} added to cart!`);
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cartCount = document.getElementById("cart-count");
+            let totalItems = 0;
+
+            cart.forEach(item => {
+                totalItems += item.quantity;
+            });
+
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        // NEW: Search functionality
+        function filterProducts() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase();
+            const productContainer = document.getElementById('productContainer');
+            const products = productContainer.getElementsByClassName('product');
+            let hasVisibleProducts = false;
+
+            // Check if we already have a no results message
+            let noResultsMsg = productContainer.querySelector('.no-results');
+
+            // Loop through all products and show/hide based on search term
+            for (let i = 0; i < products.length; i++) {
+                const productName = products[i].querySelector('h2').textContent.toLowerCase();
+
+                if (productName.includes(searchTerm)) {
+                    products[i].style.display = 'block';
+                    hasVisibleProducts = true;
+                } else {
+                    products[i].style.display = 'none';
+                }
+            }
+
+            // Show no results message if no products match
+            if (!hasVisibleProducts && searchTerm !== '') {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement('div');
+                    noResultsMsg.className = 'no-results';
+                    noResultsMsg.textContent = 'No products found matching your search.';
+                    productContainer.appendChild(noResultsMsg);
+                }
+            } else if (noResultsMsg) {
+                // Remove no results message if it exists but we now have results
+                productContainer.removeChild(noResultsMsg);
+            }
+        }
+
+        // Hide loading overlay when page is fully loaded
+        window.addEventListener('load', function() {
+            // Simulate loading delay for demo purposes
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+
+                document.body.style.opacity = 1;
+
+                // Check login status after page is loaded
+                checkLoginStatus();
+
+                // Check if redirected from login
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('login') === 'success') {
+                    showToast('Login successful! Welcome back.');
+                    // Remove the parameter from URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }, 1000);
+        });
+
+        // Also check login status when the page becomes visible again
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                checkLoginStatus();
+            }
+        });
+
+        // Check for login status every second for the first 5 seconds
+        let loginCheckCount = 0;
+        const loginCheckInterval = setInterval(function() {
+            checkLoginStatus();
+            loginCheckCount++;
+
+            if (loginCheckCount >= 5) {
+                clearInterval(loginCheckInterval);
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+/* Additional cart styles if needed */
+.cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4caf50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+}
+
+.checkout-process {
+    display: none;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.payment-options {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.payment-option {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.payment-option:hover {
+    border-color: #2575fc;
+}
+
+.payment-option.selected {
+    border-color: #2575fc;
+    background: #f0f7ff;
+}
